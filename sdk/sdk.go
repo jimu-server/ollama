@@ -99,7 +99,9 @@ func chat(response *http.Response) (DataEvent, error) {
 				send <- StreamData{Data: nil, Err: err}
 				break
 			}
-			send <- StreamData{Data: buf, Err: nil, Resp: response}
+			buffer := bytes.NewBuffer(buf)
+			buffer.WriteString("\n")
+			send <- StreamData{Data: buffer.Bytes(), Err: nil, Resp: response}
 		}
 	}()
 	return send, nil
